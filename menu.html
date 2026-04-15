@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menuja – ADC Agro & Restorant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --soil: #5C3D2E; --bark: #8B5E3C; --wheat: #D4A857;
+    --cream: #F5EDD6; --sage: #7A9E7E; --forest: #3D6B4F;
+    --sky: #A8C5A0; --stone: #C4B49A; --dark: #2A1F14; --white: #FDFAF4;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Lora', serif; background: var(--white); color: var(--dark); overflow-x: hidden; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(42,31,20,0.95); backdrop-filter: blur(10px); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 70px; border-bottom: 1px solid rgba(212,168,87,0.3); }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo .leaf { font-size: 1.6rem; }
+  .nav-logo .logo-text { font-family: 'Playfair Display', serif; color: var(--wheat); font-size: 1.1rem; font-weight: 700; line-height: 1.1; }
+  .nav-logo .logo-sub { font-family: 'Nunito', sans-serif; color: var(--stone); font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; display: block; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { font-family: 'Nunito', sans-serif; color: var(--cream); text-decoration: none; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; transition: color 0.3s; position: relative; }
+  .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 1px; background: var(--wheat); transform: scaleX(0); transition: transform 0.3s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--wheat); }
+  .nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+  .nav-cta { background: var(--wheat) !important; color: var(--dark) !important; padding: 8px 18px !important; border-radius: 30px; font-weight: 700 !important; }
+  .nav-cta::after { display: none !important; }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 5px; background: none; border: none; }
+  .hamburger span { display: block; width: 26px; height: 2px; background: var(--cream); border-radius: 2px; transition: all 0.3s; }
+  .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+  .mobile-menu { display: none; position: fixed; top: 70px; left: 0; right: 0; background: rgba(42,31,20,0.98); backdrop-filter: blur(10px); z-index: 999; padding: 1.5rem 2rem 2rem; flex-direction: column; gap: 1.2rem; border-bottom: 1px solid rgba(212,168,87,0.3); }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { font-family: 'Nunito', sans-serif; color: var(--cream); text-decoration: none; font-size: 1rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+
+  /* PAGE HERO */
+  .page-hero {
+    padding-top: 70px; height: 380px; position: relative;
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .page-hero-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(42,31,20,0.6), rgba(92,61,46,0.5)),
+      url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600&q=80') center/cover;
+  }
+  .page-hero-content { position: relative; text-align: center; color: var(--white); }
+  .page-hero-content .badge { font-family: 'Nunito', sans-serif; font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; color: var(--wheat); margin-bottom: 1rem; display: block; }
+  .page-hero-content h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem,5vw,3.8rem); }
+  .page-hero-content p { font-family: 'Lora', serif; margin-top: 0.8rem; opacity: 0.85; font-size: 1.05rem; }
+
+  /* TABS */
+  .tabs-section { background: var(--dark); padding: 1.5rem 2rem; position: sticky; top: 70px; z-index: 100; }
+  .tabs { display: flex; gap: 0.5rem; max-width: 900px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
+  .tab-btn {
+    font-family: 'Nunito', sans-serif; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase;
+    font-weight: 600; padding: 9px 20px; border-radius: 30px;
+    border: 1px solid rgba(212,168,87,0.4); color: var(--stone);
+    background: transparent; cursor: pointer; transition: all 0.3s;
+  }
+  .tab-btn:hover, .tab-btn.active { background: var(--wheat); color: var(--dark); border-color: var(--wheat); }
+
+  /* MENU CONTENT */
+  .menu-section { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; display: none; }
+  .menu-section.active { display: block; }
+
+  .menu-header { text-align: center; margin-bottom: 3.5rem; }
+  .menu-header .section-label { font-family: 'Nunito', sans-serif; font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; color: var(--sage); display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 0.8rem; }
+  .menu-header .section-label::before { content:''; width: 30px; height: 1px; background: var(--sage); }
+  .menu-header h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem,3.5vw,2.8rem); color: var(--soil); }
+  .menu-header h2 em { color: var(--forest); font-style: italic; }
+  .menu-header p { font-family: 'Lora', serif; color: #7A5C45; margin-top: 0.8rem; }
+
+  .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.8rem; }
+  
+  .dish-card {
+    display: flex; gap: 1.2rem; align-items: flex-start;
+    background: var(--cream); border-radius: 16px; padding: 1.4rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .dish-card:hover { transform: translateY(-4px); box-shadow: 0 15px 40px rgba(92,61,46,0.15); }
+  .dish-img { width: 90px; height: 90px; border-radius: 12px; object-fit: cover; flex-shrink: 0; }
+  .dish-info h4 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--soil); margin-bottom: 0.3rem; }
+  .dish-info p { font-family: 'Lora', serif; font-size: 0.85rem; color: #7A5C45; line-height: 1.6; }
+  .dish-price { font-family: 'Nunito', sans-serif; font-weight: 700; color: var(--wheat); font-size: 1.05rem; margin-top: 0.5rem; display: block; }
+  .dish-tag { background: var(--sage); color: var(--white); font-family: 'Nunito', sans-serif; font-size: 0.65rem; letter-spacing: 1px; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; }
+
+  /* FEATURED DISH */
+  .featured-dish {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;
+    background: linear-gradient(135deg, var(--soil) 0%, var(--bark) 100%);
+    border-radius: 24px; padding: 3rem; margin-bottom: 3rem; color: var(--white);
+  }
+  .featured-dish img { width: 100%; height: 300px; object-fit: cover; border-radius: 16px; }
+  .featured-dish h3 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 1rem; }
+  .featured-dish p { font-family: 'Lora', serif; opacity: 0.85; line-height: 1.7; margin-bottom: 1.5rem; }
+  .featured-price { font-family: 'Nunito', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--wheat); }
+
+  /* ARTISANAL */
+  .artisanal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .art-card { text-align: center; background: var(--cream); border-radius: 18px; overflow: hidden; transition: transform 0.3s; }
+  .art-card:hover { transform: translateY(-6px); }
+  .art-card img { width: 100%; height: 200px; object-fit: cover; }
+  .art-card-body { padding: 1.4rem; }
+  .art-card-body h4 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--soil); margin-bottom: 0.4rem; }
+  .art-card-body p { font-family: 'Lora', serif; font-size: 0.85rem; color: #7A5C45; line-height: 1.6; }
+
+  /* FOOTER */
+  footer { background: var(--dark); padding: 3rem 2rem 2rem; color: var(--stone); font-family: 'Nunito', sans-serif; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 2.5rem; }
+  .footer-brand .logo-text { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--wheat); display: block; margin-bottom: 0.8rem; }
+  .footer-brand p { font-size: 0.85rem; line-height: 1.7; opacity: 0.7; }
+  .footer-col h4 { color: var(--wheat); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1rem; }
+  .footer-col a { display: block; color: var(--stone); text-decoration: none; font-size: 0.85rem; margin-bottom: 0.5rem; opacity: 0.7; transition: opacity 0.2s; }
+  .footer-col a:hover { opacity: 1; color: var(--wheat); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.5rem; text-align: center; font-size: 0.8rem; opacity: 0.5; }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    .footer-inner { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .featured-dish { grid-template-columns: 1fr; }
+    .artisanal-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .menu-grid { grid-template-columns: 1fr; }
+    .artisanal-grid { grid-template-columns: 1fr; }
+    .footer-inner { grid-template-columns: 1fr; }
+  }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-d1 { transition-delay: 0.1s; }
+  .reveal-d2 { transition-delay: 0.2s; }
+  .reveal-d3 { transition-delay: 0.3s; }
+
+  .btn-primary { background: var(--wheat); color: var(--dark); font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; padding: 14px 32px; border-radius: 40px; text-decoration: none; transition: all 0.3s; display: inline-block; }
+  .btn-primary:hover { background: var(--bark); color: var(--white); transform: translateY(-2px); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <span class="leaf">🌿</span>
+    <div><span class="logo-text">ADC Agro & Restorant</span><span class="logo-sub">Shije Natyre · Shqipëri</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Kryefaqja</a></li>
+    <li><a href="menu.html" class="active">Menuja</a></li>
+    <li><a href="agroturizem.html">Agroturizem</a></li>
+    <li><a href="evente.html">Evente</a></li>
+    <li><a href="galeria.html">Galeria</a></li>
+    <li><a href="kontakt.html" class="nav-cta">Rezervo</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏡 Kryefaqja</a><a href="menu.html">🍽️ Menuja</a><a href="agroturizem.html">🌾 Agroturizem</a><a href="evente.html">🎊 Evente</a><a href="galeria.html">📷 Galeria</a><a href="kontakt.html">📞 Rezervo</a>
+</div>
+
+<div class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-content">
+    <span class="badge">🍽️ Kuzhina Jonë</span>
+    <h1>Menuja e <em style="font-style:italic; color: var(--wheat);">ADC Agro</em></h1>
+    <p>Produkte organike nga ferma jonë, gatuar me dashurinë e trashëgimisë shqiptare</p>
+  </div>
+</div>
+
+<div class="tabs-section">
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="antipastat">🥗 Antipasta</button>
+    <button class="tab-btn" data-tab="kryepjata">🥩 Kryepjata</button>
+    <button class="tab-btn" data-tab="peshk">🐟 Peshk</button>
+    <button class="tab-btn" data-tab="embelsira">🍮 Ëmbëlsira</button>
+    <button class="tab-btn" data-tab="pijet">🍷 Pije</button>
+    <button class="tab-btn" data-tab="artizanal">🧀 Artizanale</button>
+  </div>
+</div>
+
+<!-- ANTIPASTAT -->
+<div class="menu-section active" id="antipastat">
+  <div class="menu-header reveal">
+    <p class="section-label">Fillojmë</p>
+    <h2>Antipasta & <em>Meze</em></h2>
+    <p>Shija e parë e fermës sonë — freskësi e vërtetë rurale</p>
+  </div>
+  <div class="featured-dish reveal">
+    <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80" alt="Meze">
+    <div>
+      <span style="font-family:'Nunito',sans-serif; font-size:0.7rem; letter-spacing:3px; text-transform:uppercase; color:var(--wheat);">Rekomandimi i Kuzhinierit</span>
+      <h3>Pjata e Meze Tradicionale</h3>
+      <p>Kombinim i djathit të bardhë shtëpiak, ullinjve të marinuar, domates së freskët, bakllave gjetheje dhe perimeve me vaj ulliri bio.</p>
+      <span class="featured-price">850 LEK</span>
+    </div>
+  </div>
+  <div class="menu-grid">
+    <div class="dish-card reveal">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Gjizë me mjaltë maje</h4><p>Gjizë e freskët e bërë në fermë, me mjaltë livandesh dhe arra të bluara.</p><span class="dish-price">450 LEK</span></div>
+    </div>
+    <div class="dish-card reveal reveal-d1">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1572441713132-c542fc4fe282?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Sallatë sezonale bio</h4><p>Perime nga kopshti ynë, vaj ulliri ekstra i virgjër, limon dhe bimë aromatike.</p><span class="dish-price">380 LEK</span></div>
+    </div>
+    <div class="dish-card reveal reveal-d2">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Djathë i tymosur shtëpiak</h4><p>Djathë i prodhuar nga lopët tona, tymosur me dru lajthie — aromë unike.</p><span class="dish-price">520 LEK</span></div>
+    </div>
+    <div class="dish-card reveal reveal-d3">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1509482560494-4126f8225994?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Bruschetta me domate & borzilok</h4><p>Bukë druri me domate të korrura sot, hudhër dhe borzilok të freskët.</p><span class="dish-price">320 LEK</span></div>
+    </div>
+    <div class="dish-card reveal">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Supë e ditës</h4><p>Supë e bërë çdo ditë me perime sezonale dhe mish nga ferma jonë.</p><span class="dish-price">420 LEK</span></div>
+    </div>
+    <div class="dish-card reveal reveal-d1">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Vezë të skuqura me proshutë</h4><p>Vezë bio nga pularisë sonë, proshutë e tymosur dhe bukë gruri i plotë.</p><span class="dish-price">400 LEK</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- KRYEPJATA -->
+<div class="menu-section" id="kryepjata">
+  <div class="menu-header reveal">
+    <p class="section-label">Zemra e Menusë</p>
+    <h2>Kryepjata & <em>Gatimet Tradicionale</em></h2>
+    <p>Receta të trashëguara brez pas brezi, me produkte 100% nga ferma jonë</p>
+  </div>
+  <div class="featured-dish reveal">
+    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80" alt="Tavë Kosi">
+    <div>
+      <span style="font-family:'Nunito',sans-serif; font-size:0.7rem; letter-spacing:3px; text-transform:uppercase; color:var(--wheat);">Specialiteti i Shtëpisë</span>
+      <h3>Tavë Kosi ADC</h3>
+      <p>Mish qengji i pjekur ngadalë për 4 orë me kos shtëpiak, vezë bio dhe erëza sezonale — receta 3 gjeneratash.</p>
+      <span class="featured-price">1,200 LEK</span>
+    </div>
+  </div>
+  <div class="menu-grid">
+    <div class="dish-card reveal">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Mish viçi i pjekur në zgare</h4><p>Biftek viçi nga tufat tona, pjekur mbi drurë ahu me barishte malore.</p><span class="dish-price">1,500 LEK</span></div>
+    </div>
+    <div class="dish-card reveal reveal-d1">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1520367445093-50dc08a59d9d?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Qofte të ferrave në skarë</h4><p>Qofte me mish derie, erëza tradicionale dhe salcë domate shtëpiake.</p><span class="dish-price">900 LEK</span></div>
+    </div>
+    <div class="dish-card reveal reveal-d2">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Pule e pjekur me rozmarinë</h4><p>Pule nga pularisë jonë, e marinuar 24 orë dhe pjekur ngadalë.</p><span class="dish-price">1,100 LEK</span></div>
+    </div>
+    <div class="dish-card reveal reveal-d3">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1574894709920-11b28e7367e3?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Fergëse tradicionale</h4><p>Mish dere me domate, speca dhe gjizë — pjatë emblematike shqiptare.</p><span class="dish-price">950 LEK</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PESHK -->
+<div class="menu-section" id="peshk">
+  <div class="menu-header reveal">
+    <p class="section-label">Nga Ujërat e Pastëra</p>
+    <h2>Peshk & <em>Fruta Deti</em></h2>
+    <p>Peshk i freskët i selecionuar çdo ditë nga furnizuesit lokalë</p>
+  </div>
+  <div class="menu-grid">
+    <div class="dish-card reveal">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Skampi të grilluar</h4><p>Skampi me vaj ulliri, hudhër, limon dhe bimë aromatike mesdhetare.</p><span class="dish-price">1,800 LEK</span></div>
+    </div>
+    <div class="dish-card reveal reveal-d1">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Troftë e lumit e pjekur</h4><p>Troftë e freskët nga lumenjtë vendas, e mbushur me bimë dhe limon.</p><span class="dish-price">1,200 LEK</span></div>
+    </div>
+    <div class="dish-card reveal reveal-d2">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1606850780654-35d3e5d55b77?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Meze fruta deti</h4><p>Kombinim midhjesh, kallamarësh dhe krambësh me salcë feta shtëpiake.</p><span class="dish-price">2,000 LEK</span></div>
+    </div>
+    <div class="dish-card reveal reveal-d3">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1478145046317-39f10e56b5e9?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Levrek i pjekur në kripë</h4><p>Levrek i plotë i pjekur në kripë deti — metodë tradicionale mesdhetare.</p><span class="dish-price">1,600 LEK</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ËMBËLSIRA -->
+<div class="menu-section" id="embelsira">
+  <div class="menu-header reveal">
+    <p class="section-label">Mbyllja e Ëmbël</p>
+    <h2>Ëmbëlsira & <em>Bakllava</em></h2>
+    <p>Receta artizanale të bëra me duart tona çdo ditë</p>
+  </div>
+  <div class="menu-grid">
+    <div class="dish-card reveal">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1551024601-bec78aea704b?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Bakllava shtëpiake</h4><p>Shtresa të holla me arra, kanellë dhe mjaltë nga bletët tona.</p><span class="dish-price">350 LEK</span></div>
+    </div>
+    <div class="dish-card reveal reveal-d1">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Trilece ADC</h4><p>Keku klasik i njomur me tre qumështe — delikatesa jonë e ëmbël.</p><span class="dish-price">400 LEK</span></div>
+    </div>
+    <div class="dish-card reveal reveal-d2">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1488477181946-6428a0291777?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Akullore bërë në shtëpi</h4><p>Akullore me qumësht lope nga ferma jonë, vanilje dhe shegë.</p><span class="dish-price">300 LEK</span></div>
+    </div>
+    <div class="dish-card reveal reveal-d3">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Petë me mjaltë & arra</h4><p>Petë të bëra me dorë, mjaltë blete dhe arra të sapo grira.</p><span class="dish-price">420 LEK</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PIJET -->
+<div class="menu-section" id="pijet">
+  <div class="menu-header reveal">
+    <p class="section-label">Bar & Pije</p>
+    <h2>Pije <em>Tradicionale & Moderne</em></h2>
+    <p>Nga sherbet shtëpiak tek vera lokale — një gotë për çdo humor</p>
+  </div>
+  <div class="menu-grid">
+    <div class="dish-card reveal">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1544145945-f90425340c7e?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Sherbet luleshtrydhe</h4><p>Sherbet i bërë me luleshtrydhe të freskëta nga kopshti ynë.</p><span class="dish-price">250 LEK</span></div>
+    </div>
+    <div class="dish-card reveal reveal-d1">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Verë e bardhë lokale</h4><p>Verë e bardhë nga vreshtat shqiptare — freskësi dhe elegancë.</p><span class="dish-price">500 LEK / gotë</span></div>
+    </div>
+    <div class="dish-card reveal reveal-d2">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1563227812-0ea4c22e6cc8?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Raki tradicionale</h4><p>Raki gruri e distiluar me kujdes — traditë shqiptare e vërtetë.</p><span class="dish-price">300 LEK</span></div>
+    </div>
+    <div class="dish-card reveal reveal-d3">
+      <img class="dish-img" src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=200&q=80" alt="">
+      <div class="dish-info"><h4>Kafe turke & boza</h4><p>Kafe e zier mbi zjarr, me llokume dhe sheqer kube tradicionale.</p><span class="dish-price">180 LEK</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ARTIZANALE -->
+<div class="menu-section" id="artizanal">
+  <div class="menu-header reveal">
+    <p class="section-label">Dyqani Ynë</p>
+    <h2>Produkte <em>Artizanale</em></h2>
+    <p>Mund t'i blini edhe për t'i çuar shtëpi — dhurata perfekte nga ferma</p>
+  </div>
+  <div class="artisanal-grid">
+    <div class="art-card reveal">
+      <img src="https://images.unsplash.com/photo-1559561853-08451507cbe7?w=400&q=80" alt="Djathë">
+      <div class="art-card-body"><h4>🧀 Djathë Artizanal</h4><p>Djathë i bardhë, i tymosur dhe kaçkavall — prodhim 100% shtëpiak.</p></div>
+    </div>
+    <div class="art-card reveal reveal-d1">
+      <img src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&q=80" alt="Mjaltë">
+      <div class="art-card-body"><h4>🍯 Mjaltë & Sherbet</h4><p>Mjaltë livandesh, akacjeje dhe bimësh malore — shija e pastërtisë.</p></div>
+    </div>
+    <div class="art-card reveal reveal-d2">
+      <img src="https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=400&q=80" alt="Vaj ulliri">
+      <div class="art-card-body"><h4>🫒 Vaj Ulliri Bio</h4><p>Vaj i shtypjes së parë të ftohët — ekstra i virgjër nga ullishtat tona.</p></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="logo-text">🌿 ADC Agro & Restorant</span>
+      <p>Produkte organike nga ferma jonë, gatuar me dashurinë e trashëgimisë shqiptare.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigimi</h4>
+      <a href="index.html">Kryefaqja</a><a href="menu.html">Menuja</a><a href="agroturizem.html">Agroturizem</a><a href="evente.html">Evente</a><a href="galeria.html">Galeria</a><a href="kontakt.html">Kontakt</a>
+    </div>
+    <div class="footer-col">
+      <h4>Orari</h4>
+      <a href="#">E Hënë–E Premte</a><a href="#">08:00 – 23:00</a><a href="#">E Shtunë–E Diel</a><a href="#">07:00 – 24:00</a>
+    </div>
+    <div class="footer-col">
+      <h4>Kontakt</h4>
+      <a href="#">📍 Durrës, Shqipëri</a><a href="tel:+355000000000">📞 +355 00 000 0000</a><a href="mailto:info@adcagro.al">✉️ info@adcagro.al</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2025 ADC Agro & Restorant. Të gjitha të drejtat e rezervuara.</div>
+</footer>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => { hamburger.classList.toggle('open'); mobileMenu.classList.toggle('open'); });
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { hamburger.classList.remove('open'); mobileMenu.classList.remove('open'); }));
+
+  // Tabs
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+      window.scrollTo({ top: document.querySelector('.tabs-section').offsetTop - 70, behavior: 'smooth' });
+    });
+  });
+
+  // Reveal
+  const observer = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
